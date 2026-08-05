@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sua concorrente aparece antes de você no Maps — veja a comparação</title>
+<meta name="description" content="Cuido do perfil da sua clínica no Google Maps: fotos, posts e resposta a todas as avaliações. Primeiro eu comparo o seu perfil com o das três clínicas vizinhas e te mostro o quadro. R$297 por mês, sem fidelidade.">
+<meta name="theme-color" content="#8b2252">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Sua concorrente aparece antes de você no Maps">
+<meta property="og:description" content="Comparo o perfil da sua clínica no Google Maps com o das três vizinhas e cuido do seu todo mês: fotos, posts e resposta a todas as avaliações. R$297/mês, sem fidelidade.">
+<meta property="og:url" content="https://elucidata-ventures.github.io/gbp-estetica/">
+
+<script>
+  // CANAL DE CONTATO — preencher quando o MP liberar (pendência P-002/P-008 do fundo).
+  // whatsapp: só dígitos, com DDI+DDD. Ex.: "5511999999999"
+  // email:    endereço completo.      Ex.: "contato@dominio.com.br"
+  // instagram: usuário sem @.         Ex.: "perfilnomaps"
+  const CONTATO = { whatsapp: "", email: "", instagram: "" };
+</script>
+
+<style>
+  :root{
+    --ink:#15161a;
+    --ink-2:#454b55;
+    --line:#e3e5ea;
+    --bg:#ffffff;
+    --bg-2:#f6f6f8;
+    --acc:#8b2252;
+    --acc-d:#6e1a41;
+    --acc-tint:#fbeef4;
+    --amber-tint:#fdf5e6;
+    --amber-line:#e8d5a8;
+    --ok:#0b6b3a;
+    --bad:#b03030;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 20px}
+  section{padding:36px 0;border-top:1px solid var(--line)}
+  section:first-of-type{border-top:none}
+  h1{font-size:31px;line-height:1.16;letter-spacing:-.02em;margin:0 0 14px;font-weight:800}
+  h2{font-size:22px;line-height:1.25;letter-spacing:-.01em;margin:0 0 16px;font-weight:750}
+  h3{font-size:17px;margin:0 0 6px;font-weight:700}
+  p{margin:0 0 14px}
+  p:last-child{margin-bottom:0}
+  strong{font-weight:700}
+  small{font-size:14.5px;color:var(--ink-2);line-height:1.5;display:block}
+
+  /* topo */
+  .hero{padding:34px 0 30px}
+  .kicker{
+    display:inline-block;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--acc);background:var(--acc-tint);border-radius:999px;padding:6px 12px;margin:0 0 18px
+  }
+  .lead{font-size:18.5px;color:var(--ink-2);margin:0 0 20px}
+  .lead b{color:var(--ink)}
+  .strip{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+  .strip li{
+    font-size:14.5px;font-weight:600;color:var(--ink-2);
+    border:1px solid var(--line);border-radius:999px;padding:6px 12px;background:var(--bg-2)
+  }
+
+  /* quadro comparativo */
+  .board{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--bg-2)}
+  .board-head{padding:14px 16px;background:var(--acc-tint);border-bottom:1px solid var(--line)}
+  .board-head strong{display:block;font-size:15px;color:var(--acc-d)}
+  .board-head small{margin-top:3px;color:#7a5566}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;min-width:430px;background:var(--bg);font-size:15px}
+  th,td{padding:10px 12px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+  thead th{font-size:13.5px;font-weight:700;color:var(--ink-2);background:var(--bg-2)}
+  thead th:first-child,tbody th{text-align:left;font-weight:600;color:var(--ink-2);white-space:normal;min-width:150px}
+  tbody th{font-size:15px}
+  thead th.you{color:var(--acc-d);background:var(--acc-tint)}
+  td.you{font-weight:800;color:var(--bad);background:#fff6f6}
+  tbody tr:last-child th,tbody tr:last-child td{border-bottom:none}
+  .board-foot{padding:12px 16px;border-top:1px solid var(--line)}
+  .board-foot small{color:var(--ink-2)}
+
+  /* passos */
+  ol.steps{list-style:none;counter-reset:s;margin:0;padding:0}
+  ol.steps li{counter-increment:s;position:relative;padding:0 0 22px 46px}
+  ol.steps li:last-child{padding-bottom:0}
+  ol.steps li::before{
+    content:counter(s);position:absolute;left:0;top:1px;
+    width:31px;height:31px;border-radius:50%;
+    background:var(--acc);color:#fff;font-weight:700;font-size:15px;
+    display:flex;align-items:center;justify-content:center
+  }
+  ol.steps li::after{content:"";position:absolute;left:15px;top:38px;bottom:8px;width:2px;background:var(--line)}
+  ol.steps li:last-child::after{display:none}
+  ol.steps p{font-size:16.5px;color:var(--ink-2);margin:0}
+
+  /* entregas */
+  .checks{list-style:none;margin:0;padding:0}
+  .checks li{position:relative;padding:0 0 18px 34px}
+  .checks li:last-child{padding-bottom:0}
+  .checks svg{position:absolute;left:0;top:3px;width:22px;height:22px}
+  .checks p{font-size:16px;color:var(--ink-2);margin:2px 0 0}
+
+  /* nunca */
+  .nevers{list-style:none;margin:0;padding:0}
+  .nevers li{position:relative;padding:0 0 14px 30px;font-size:16px;color:var(--ink-2)}
+  .nevers li:last-child{padding-bottom:0}
+  .nevers li::before{
+    content:"";position:absolute;left:2px;top:9px;width:12px;height:2px;background:var(--bad);border-radius:2px
+  }
+  .nevers b{color:var(--ink)}
+
+  /* preço */
+  .price-card{border:1px solid var(--line);border-radius:var(--radius);padding:22px;background:var(--bg-2)}
+  .price-big{font-size:36px;font-weight:800;letter-spacing:-.02em;line-height:1.1;color:var(--ink);margin:0 0 4px}
+  .price-big span{font-size:17px;font-weight:600;color:var(--ink-2);letter-spacing:0}
+  .price-rows{list-style:none;margin:18px 0 0;padding:18px 0 0;border-top:1px solid var(--line)}
+  .price-rows li{display:flex;justify-content:space-between;gap:14px;padding:7px 0;font-size:16px}
+  .price-rows li span:last-child{font-weight:700;text-align:right;white-space:nowrap}
+  .price-rows li span:first-child{color:var(--ink-2)}
+  .highlight{
+    margin-top:18px;background:var(--acc-tint);border-left:4px solid var(--acc);
+    border-radius:8px;padding:14px 16px;font-size:16.5px
+  }
+
+  /* faq */
+  details{border-bottom:1px solid var(--line);padding:14px 0}
+  details:first-of-type{border-top:1px solid var(--line)}
+  summary{
+    font-weight:700;font-size:16.5px;cursor:pointer;list-style:none;
+    display:flex;justify-content:space-between;align-items:flex-start;gap:14px
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-weight:700;font-size:22px;line-height:1;color:var(--acc);flex:0 0 auto}
+  details[open] summary::after{content:"–"}
+  details p{margin-top:11px;font-size:16px;color:var(--ink-2)}
+
+  /* cta */
+  .cta{background:var(--ink);color:#fff;border-radius:var(--radius);padding:26px 22px;text-align:center}
+  .cta h2{color:#fff;margin-bottom:10px}
+  .cta p{color:#c9ccd3;font-size:16.5px}
+  .btn{
+    display:block;width:100%;margin-top:18px;padding:16px 20px;
+    background:var(--acc);color:#fff;text-decoration:none;font-weight:700;font-size:17.5px;
+    border-radius:10px;text-align:center
+  }
+  .btn:active{background:var(--acc-d)}
+  .btn + .btn{margin-top:10px;background:transparent;border:1px solid #4b515c;color:#fff}
+  .fallback{
+    margin-top:18px;background:#22242a;border:1px solid #363943;border-radius:10px;
+    padding:16px;color:#e7e9ee;font-size:16.5px;font-weight:600
+  }
+  .fallback small{color:#aab0ba;margin-top:6px;font-weight:400}
+
+  .honest{background:var(--amber-tint);border:1px solid var(--amber-line);border-radius:var(--radius);padding:18px 20px}
+  .honest h3{margin-bottom:8px}
+  .honest p{font-size:16px;color:#5a4a29}
+
+  footer{padding:28px 0 44px;color:var(--ink-2);font-size:14px;border-top:1px solid var(--line)}
+  footer p{margin:0 0 6px}
+
+  @media (min-width:620px){
+    body{font-size:18px}
+    h1{font-size:41px}
+    h2{font-size:26px}
+    .lead{font-size:20px}
+    section{padding:46px 0}
+    .btn{display:inline-block;width:auto;min-width:300px}
+    table{font-size:16px}
+  }
+</style>
+</head>
+<body>
+
+<main class="wrap">
+
+  <!-- 1. HEADLINE -->
+  <section class="hero">
+    <span class="kicker">Perfil do Google Maps para clínicas de estética</span>
+    <h1>Sua concorrente aparece antes de você no Maps.</h1>
+    <p class="lead">
+      Antes de te vender qualquer coisa, eu comparo o perfil da sua clínica no Google com o das
+      <b>três clínicas vizinhas que aparecem na sua frente</b> — nome por nome, número por número — e
+      te mostro o quadro. Se fizer sentido, eu passo a cuidar do seu perfil todo mês:
+      <b>fotos, publicações e resposta a todas as avaliações</b>. R$297 por mês, sem fidelidade.
+    </p>
+    <ul class="strip">
+      <li>Comparação antes de contratar</li>
+      <li>Sem fidelidade</li>
+      <li>Sem taxa de setup</li>
+      <li>Cancela por mensagem</li>
+    </ul>
+  </section>
+
+  <!-- 2. O QUADRO — o gancho -->
+  <section>
+    <h2>É este o quadro que eu te mando</h2>
+    <p>
+      Quem procura uma clínica na sua região digita o serviço e o bairro, olha os três primeiros
+      resultados do mapa e decide ali — nas fotos, na nota e no movimento do perfil. Não é uma
+      questão de gosto: é o que o Google mostra primeiro.
+    </p>
+    <div class="board">
+      <div class="board-head">
+        <strong>Modelo do quadro comparativo</strong>
+        <small>Números ilustrativos, só para você ver o formato. Na sua auditoria, as vizinhas
+        aparecem com o nome real e todos os dados vêm do próprio Google Maps, na data da consulta.</small>
+      </div>
+      <div class="scroll">
+        <table>
+          <caption class="sr-only" style="position:absolute;left:-9999px">Comparação do perfil da sua clínica com três clínicas vizinhas</caption>
+          <thead>
+            <tr>
+              <th scope="col">No perfil do Google</th>
+              <th scope="col" class="you">Sua clínica</th>
+              <th scope="col">Vizinha 1</th>
+              <th scope="col">Vizinha 2</th>
+              <th scope="col">Vizinha 3</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Posição na busca do bairro</th><td class="you">7º</td><td>1º</td><td>2º</td><td>4º</td></tr>
+            <tr><th scope="row">Fotos publicadas</th><td class="you">11</td><td>240</td><td>96</td><td>58</td></tr>
+            <tr><th scope="row">Foto mais recente</th><td class="you">há 1 ano</td><td>ontem</td><td>há 3 dias</td><td>há 2 meses</td></tr>
+            <tr><th scope="row">Avaliações</th><td class="you">23</td><td>402</td><td>187</td><td>91</td></tr>
+            <tr><th scope="row">Nota</th><td class="you">4,7</td><td>4,9</td><td>4,8</td><td>4,6</td></tr>
+            <tr><th scope="row">Avaliações respondidas</th><td class="you">0%</td><td>100%</td><td>62%</td><td>18%</td></tr>
+            <tr><th scope="row">Publicações em 30 dias</th><td class="you">0</td><td>12</td><td>4</td><td>1</td></tr>
+            <tr><th scope="row">Serviços cadastrados</th><td class="you">3</td><td>27</td><td>18</td><td>9</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="board-foot">
+        <small>A auditoria vem com o que fazer em cada linha, na ordem do que muda mais rápido. Ela é
+        sua para ficar, mesmo que você não contrate nada.</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. POR QUE ISSO DECIDE -->
+  <section>
+    <h2>Por que o perfil decide antes de o telefone tocar</h2>
+    <p>
+      A pessoa que procura uma clínica na sua rua não conhece nenhuma das opções. Ela abre o mapa,
+      compara três perfis lado a lado em quinze segundos e escolhe o que <strong>parece mais
+      cuidado</strong>: o que tem foto boa da sala, o que responde quem avaliou, o que publicou algo
+      esta semana.
+    </p>
+    <p>
+      A clínica que aparece na sua frente quase nunca é melhor que a sua. Ela só tem o perfil mais
+      trabalhado — e isso é a única parte do jogo que dá para virar sem depender de indicação, sem
+      contratar mídia e sem baixar preço.
+    </p>
+    <p>
+      Cuidar disso é um trabalho miúdo e diário: fotografar, publicar, responder, atualizar. É o
+      primeiro a ficar para depois quando a agenda está cheia. É exatamente esse trabalho que eu
+      assumo.
+    </p>
+  </section>
+
+  <!-- 4. COMO FUNCIONA -->
+  <section>
+    <h2>Como funciona</h2>
+    <ol class="steps">
+      <li>
+        <h3>Eu monto a comparação — sem você fazer nada</h3>
+        <p>
+          Uso o que já é público no Google Maps. Não preciso de acesso, senha nem cadastro para essa
+          parte. Você recebe o quadro pronto, com as vizinhas nomeadas.
+        </p>
+      </li>
+      <li>
+        <h3>A gente olha o quadro junto, em 15 minutos</h3>
+        <p>
+          Eu te mostro onde a diferença aparece e o que dá para recuperar primeiro. Se a sua clínica
+          já estiver bem posicionada, eu falo isso na hora — não faz sentido você me pagar para
+          manter o que já está funcionando sozinho.
+        </p>
+      </li>
+      <li>
+        <h3>Você me dá acesso de gerente ao seu perfil</h3>
+        <p>
+          Acesso de gerente do Google Business Profile, que você concede e revoga em dois cliques,
+          sem senha e sem sair da sua conta. A propriedade do perfil continua sendo sua, sempre.
+        </p>
+      </li>
+      <li>
+        <h3>Eu cuido do perfil todo mês e te mando o antes e depois dos números</h3>
+        <p>
+          Fotos novas, publicações, resposta a todas as avaliações e a ficha completa da clínica. No
+          fim do mês, o mesmo quadro comparativo de novo — para você ver o que mexeu e o que não
+          mexeu.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 5. O QUE EU FAÇO -->
+  <section>
+    <h2>O que entra nos R$297 por mês</h2>
+    <ul class="checks">
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8b2252" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        <h3>Fotos novas todo mês — o item que mais pesa</h3>
+        <p>
+          Perfil com foto parada há um ano perde para perfil vivo. Eu trato as fotos que você já tem
+          (enquadramento, luz, cor), produzo imagens da recepção, das salas, dos equipamentos e da
+          equipe com apoio de IA quando falta material, e publico em ritmo constante — não tudo de
+          uma vez.
+        </p>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8b2252" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        <h3>Publicações semanais no perfil</h3>
+        <p>
+          As publicações do Google Business Profile aparecem para quem já está olhando a sua clínica
+          e sinalizam movimento. Faço de 4 a 8 por mês: novidades da clínica, horários, informações
+          de atendimento, agenda de datas. Você aprova a pauta do mês antes de começar.
+        </p>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8b2252" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        <h3>Resposta a todas as avaliações, em até 24h</h3>
+        <p>
+          Todas — as boas e as ruins. Sem resposta genérica repetida e sem citar tratamento, queixa
+          ou qualquer dado de quem escreveu. Resposta a avaliação negativa vai para a sua aprovação
+          antes de ir ao ar. Quem lê o perfil repara mais na sua resposta do que na reclamação.
+        </p>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8b2252" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        <h3>A ficha da clínica completa e correta</h3>
+        <p>
+          Categoria principal e secundárias, lista de serviços, área de atendimento, horários
+          (inclusive feriados), formas de pagamento, acessibilidade, estacionamento, link de
+          agendamento e as perguntas e respostas do perfil. É a parte chata que ninguém preenche até
+          o fim — e que o Google usa para decidir quem mostrar.
+        </p>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8b2252" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        <h3>Monitoramento do perfil e das vizinhas</h3>
+        <p>
+          Aviso quando entra avaliação nova, quando alguém sugere uma edição no seu perfil (sim,
+          qualquer pessoa pode) e quando uma vizinha muda de posição. Relatório mensal de uma página,
+          com o mesmo quadro comparativo do início.
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 6. COMPLIANCE -->
+  <section>
+    <h2>O que eu não faço — e não é negociável</h2>
+    <p style="color:var(--ink-2)">
+      Estética e saúde têm regra de publicidade, e quem responde pelo perfil é você. Todo o meu
+      trabalho é sobre <strong>o perfil da clínica no mapa</strong> — nunca sobre procedimento,
+      indicação clínica ou resultado de tratamento.
+    </p>
+    <ul class="nevers">
+      <li><b>Nada de antes e depois</b> — nem em foto, nem em publicação, nem em resposta de avaliação.</li>
+      <li><b>Nenhuma imagem de paciente</b>, com ou sem autorização. As fotos são do espaço, dos equipamentos e da equipe.</li>
+      <li><b>Nenhuma promessa de resultado</b>, de tempo de recuperação ou de eficácia de procedimento.</li>
+      <li><b>Nenhuma menção a tratamento nas respostas públicas</b> — o que a pessoa fez na sua clínica não vira texto público na minha mão.</li>
+      <li><b>Nenhuma avaliação comprada, trocada ou escrita por mim.</b> Não crio perfil falso, não peço avaliação em troca de desconto e não denuncio avaliação de concorrente.</li>
+      <li><b>Nenhum perfil duplicado ou endereço inventado</b> para tentar aparecer em mais bairros. Isso derruba o perfil, e derruba o seu, não o meu.</li>
+    </ul>
+    <p style="margin-top:16px"><small>
+      Publicação técnica, promocional ou de conteúdo que envolva procedimento é responsabilidade do
+      profissional habilitado da clínica: eu não escrevo esse tipo de texto e não publico nada nessa
+      linha sem que o responsável técnico aprove por escrito.
+    </small></p>
+  </section>
+
+  <!-- 7. PREÇO -->
+  <section>
+    <h2>Quanto custa</h2>
+    <div class="price-card">
+      <p class="price-big">R$297 <span>por mês, por unidade</span></p>
+      <ul class="price-rows">
+        <li><span>Taxa de setup</span><span>R$0</span></li>
+        <li><span>Auditoria comparativa inicial</span><span>R$0</span></li>
+        <li><span>Fidelidade</span><span>Nenhuma</span></li>
+        <li><span>Ferramenta que você precisa assinar</span><span>Nenhuma</span></li>
+        <li><span>Verba de anúncio</span><span>Não uso</span></li>
+        <li><span>Aviso prévio para cancelar</span><span>Nenhum</span></li>
+      </ul>
+      <div class="highlight">
+        <strong>Sem fidelidade quer dizer sem fidelidade.</strong> Você cancela por mensagem, no mês
+        que quiser, e eu devolvo o acesso de gerente no mesmo dia. O perfil, as fotos e o histórico
+        ficam com você — nada do que eu publiquei sai do ar quando eu saio.
+      </div>
+    </div>
+    <p style="margin-top:16px"><small>
+      Segunda unidade da mesma clínica: R$197/mês. Cobrança mensal, sem cartão preso e sem contrato
+      de permanência.
+    </small></p>
+  </section>
+
+  <!-- 8. TRANSPARÊNCIA -->
+  <section>
+    <div class="honest">
+      <h3>Uma coisa que você merece saber antes de responder</h3>
+      <p>
+        Eu estou começando agora e não vou te mostrar depoimento, logo de cliente nem número de caso
+        que não existe. É por isso que a comparação é de graça e que não existe fidelidade: você
+        julga o trabalho pelo que aparecer no seu perfil no primeiro mês e sai quando quiser.
+      </p>
+      <p style="margin-bottom:0">
+        O que eu posso te dar hoje é o quadro do seu bairro, feito com dados públicos, antes de você
+        gastar um real. Se ele não te incomodar, a gente encerra a conversa por aí.
+      </p>
+    </div>
+  </section>
+
+  <!-- 9. FAQ -->
+  <section>
+    <h2>Perguntas diretas</h2>
+
+    <details>
+      <summary>Que acesso você precisa do meu perfil?</summary>
+      <p>
+        Acesso de <strong>gerente</strong> no Google Business Profile, que você concede pelo próprio
+        painel e revoga em dois cliques. Não peço a sua senha, não entro na sua conta Google e não
+        toco em nada além do perfil da clínica. A propriedade continua sua do começo ao fim — se a
+        gente parar, você tira o meu acesso e pronto.
+      </p>
+    </details>
+
+    <details>
+      <summary>Em quanto tempo eu vejo diferença?</summary>
+      <p>
+        A ficha completa, as fotos e as respostas ficam prontas nas primeiras duas semanas — isso
+        você vê no perfil na hora. Posição no mapa é outra história: depende do bairro, da
+        concorrência e da distância de quem procura, e não é algo que eu ou qualquer pessoa possa
+        garantir. Por isso o combinado é medir com o mesmo quadro comparativo todo mês: você olha os
+        números e decide se vale continuar.
+      </p>
+    </details>
+
+    <details>
+      <summary>Você garante o primeiro lugar no Google?</summary>
+      <p>
+        Não, e desconfie de quem garantir. Ninguém controla o ranking do Google. O que eu controlo é
+        tudo o que o Google olha e que hoje está vazio ou desatualizado no seu perfil: fotos,
+        publicações, respostas, categorias e serviços. Faço a parte que é fazível e te mostro o
+        placar de verdade.
+      </p>
+    </details>
+
+    <details>
+      <summary>De onde saem as fotos, já que não pode ter paciente?</summary>
+      <p>
+        Da clínica: recepção, salas, equipamentos, detalhes do ambiente, equipe (com autorização de
+        cada um). Trato o que você já tem no celular e, quando falta material, produzo imagens com
+        apoio de IA a partir das suas próprias fotos do espaço — sempre identificadas como imagem do
+        ambiente, nunca simulando resultado de procedimento nem pessoa atendida.
+      </p>
+    </details>
+
+    <details>
+      <summary>E as avaliações ruins?</summary>
+      <p>
+        São respondidas também, sempre. Escrevo uma resposta pública curta, educada, sem citar
+        procedimento, queixa clínica ou qualquer dado da pessoa, chamando a conversa para o canal
+        privado da clínica — e mando para a sua aprovação antes de publicar. Não peço remoção de
+        avaliação de concorrente e não invento avaliação boa para diluir.
+      </p>
+    </details>
+
+    <details>
+      <summary>Já tenho quem cuide do meu Instagram. Muda alguma coisa?</summary>
+      <p>
+        Muda o lugar. Instagram é para quem já te conhece; o mapa é para quem está procurando uma
+        clínica agora e ainda não sabe que você existe. São públicos diferentes e um não alimenta o
+        outro. Eu não mexo no seu Instagram e não brigo com quem cuida dele.
+      </p>
+    </details>
+
+    <details>
+      <summary>Tenho duas unidades. Como fica?</summary>
+      <p>
+        Cada unidade tem o seu próprio perfil no Google e precisa de trabalho separado — inclusive
+        para as duas não competirem entre si. A primeira sai por R$297/mês e as demais por R$197/mês
+        cada.
+      </p>
+    </details>
+
+    <details>
+      <summary>Como eu cancelo?</summary>
+      <p>
+        Me manda uma mensagem. Sem multa, sem aviso prévio, sem fidelidade. Eu devolvo o acesso de
+        gerente no mesmo dia e o mês em curso é o último. Tudo o que foi publicado continua no ar e
+        no seu perfil.
+      </p>
+    </details>
+  </section>
+
+  <!-- 10. CTA -->
+  <section>
+    <div class="cta">
+      <h2>Quer ver a comparação da sua clínica?</h2>
+      <p>
+        Me diga o nome da clínica e a cidade. Eu monto o quadro com as três vizinhas que aparecem na
+        sua frente e te mando — de graça, sem compromisso e sem precisar de acesso nenhum.
+      </p>
+      <div id="cta-slot"></div>
+      <noscript>
+        <div class="fallback">
+          Responda a mensagem que você recebeu — eu retorno no mesmo canal.
+        </div>
+      </noscript>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>Perfil no Mapa</strong> — gestão do Google Business Profile para clínicas de estética.</p>
+    <p>
+      Serviço de gestão de perfil comercial no Google Maps. Não prestamos assistência à saúde, não
+      indicamos procedimentos e não veiculamos publicidade de tratamento: conteúdo técnico ou
+      promocional de procedimento é de responsabilidade do profissional habilitado da clínica
+      contratante. Não publicamos imagens de pacientes nem comparações de antes e depois.
+    </p>
+    <p>
+      Não compramos, trocamos, escrevemos nem removemos avaliações. Google, Google Maps e Google
+      Business Profile são marcas do Google LLC; não temos vínculo, parceria ou representação da
+      empresa.
+    </p>
+  </footer>
+
+</main>
+
+<script>
+  (function () {
+    var slot = document.getElementById('cta-slot');
+    if (!slot) return;
+
+    var zap  = (CONTATO.whatsapp  || '').replace(/\D/g, '');
+    var mail = (CONTATO.email     || '').trim();
+    var insta= (CONTATO.instagram || '').trim().replace(/^@/, '');
+    var msg  = 'Oi! Vi a página e quero ver a comparação do perfil da minha clínica com as vizinhas.';
+    var html = '';
+
+    if (zap) {
+      html += '<a class="btn" href="https://wa.me/' + zap + '?text=' + encodeURIComponent(msg) + '"' +
+              ' rel="noopener">Quero ver a minha comparação</a>';
+    }
+    if (mail) {
+      html += '<a class="btn" href="mailto:' + mail +
+              '?subject=' + encodeURIComponent('Comparação do perfil da minha clínica no Maps') +
+              '&body=' + encodeURIComponent(msg) + '">Pedir por e-mail</a>';
+    }
+    if (insta) {
+      html += '<a class="btn" href="https://instagram.com/' + encodeURIComponent(insta) + '"' +
+              ' rel="noopener">Chamar no Instagram</a>';
+    }
+    if (!html) {
+      html = '<div class="fallback">Responda a mensagem que você recebeu — eu retorno no mesmo canal.' +
+             '<small>Ainda não publiquei um número público: prefiro atender uma clínica de cada vez, ' +
+             'no canal em que você já me chamou.</small></div>';
+    }
+    slot.innerHTML = html;
+  })();
+</script>
+
+</body>
+</html>
