@@ -14,7 +14,11 @@
 <meta property="og:url" content="https://elucidata-ventures.github.io/gbp-estetica/">
 
 <script>
-  // CANAL DE CONTATO — preencher quando o MP liberar (pendência P-002/P-008 do fundo).
+  // CANAL DE CONTATO — preencher quando UMA destas 3 pendências sair (portfolio/PENDENCIAS.csv):
+  //   P-G001-12-01 → whatsapp  (linha pré-paga, 96% de cobertura do ICP — a preferida)
+  //   P-011        → instagram (@ da família GBP, canal do gene CANAL)
+  //   P-G001-12-02 → email     (alias g001-12@elucidata.com.br, carona na P-018 — a mais barata)
+  // Basta UMA. Preencher só o campo liberado e republicar (método em landing/RELATORIO.md).
   // whatsapp: só dígitos, com DDI+DDD. Ex.: "5511999999999"
   // email:    endereço completo.      Ex.: "contato@dominio.com.br"
   // instagram: usuário sem @.         Ex.: "perfilnomaps"
@@ -527,6 +531,277 @@
       </noscript>
     </div>
   </section>
+
+<!-- INICIO WIDGET DE INTENCAO (fonte: assets/widget_intencao.html) -->
+<!-- ==================================================================
+     WIDGET DE INTENÇÃO — G001-12 (GBP Estética)
+     Mede as DUAS métricas do Gate 1 SEPARADAMENTE, nunca num contador só:
+       "Quero a proposta"   -> tipo=pedido_proposta  (threshold >= 5)
+       "Topo os R$297/mês"  -> tipo=aceite_preco     (threshold >= 2)
+     O terceiro botão (tipo=interesse) existe DE PROPÓSITO: é a válvula de
+     escape da curiosidade, para ela não contaminar o numerador. Regra desta
+     venture: "na dúvida, não conta" (COPY_DM.md §6). O aceite de preço exige
+     confirmação em 2 gestos e, se a pessoa recuar, o clique é rebaixado
+     automaticamente para pedido de proposta — nunca sobe sozinho.
+     Transporte: 1 POST por clique para tópico público do ntfy.sh. R$0, sem
+     conta, sem cadastro, sem aceite de termos. O ntfy retém só ~12h: a
+     evidência durável é colhida por ops/coletar_intencao.py a cada heartbeat.
+     LGPD: nenhum campo de nome, e-mail ou telefone. O texto livre é opcional
+     e passa por filtro de PII (e-mail e telefone) ANTES de sair do navegador.
+  ================================================================== -->
+<section class="wi-sec" id="intencao">
+  <div class="wi-card">
+    <span class="wi-kicker">Sem cadastro</span>
+    <h2 class="wi-h">Em que ponto você está?</h2>
+    <p class="wi-lead">
+      Um toque e pronto. <b>Não peço nome, e-mail nem telefone</b> — é anônimo de verdade, e serve
+      para eu saber se vale a pena continuar com este serviço.
+    </p>
+
+    <div class="wi-field">
+      <label class="wi-label" for="wi-obs">Se quiser, escreva uma frase <span class="wi-opt">(opcional)</span></label>
+      <textarea id="wi-obs" class="wi-ta" rows="2" maxlength="300" autocomplete="off" spellcheck="false"
+        placeholder="O que te fez clicar?"></textarea>
+    </div>
+
+    <div class="wi-opts" id="wi-opts">
+      <button type="button" class="wi-btn wi-a" data-tipo="pedido_proposta"
+        data-frase="Quero a proposta: o que você faria na minha clínica e quanto fica por mês">
+        <b>Quero a proposta</b>
+        <small>Me manda o que você faria na minha clínica e quanto fica por mês.</small>
+      </button>
+      <button type="button" class="wi-btn wi-b" data-tipo="aceite_preco"
+        data-frase="Topo os R$297 por mês, sem fidelidade, e quero começar">
+        <b>Topo os R$297/mês</b>
+        <small>Li o preço, sem fidelidade, e quero começar.</small>
+      </button>
+      <button type="button" class="wi-btn wi-c" data-tipo="interesse"
+        data-frase="Achei interessante, mas ainda não é um pedido">
+        <b>Ainda não — só estou olhando</b>
+        <small>Achei interessante, mas não é um pedido de proposta.</small>
+      </button>
+    </div>
+
+    <div class="wi-confirm" id="wi-confirm" hidden>
+      <p><strong>Só para eu não contar errado:</strong> você está dizendo que topa
+      <strong>R$297 por mês, sem fidelidade</strong>, e quer começar. É isso mesmo?</p>
+      <div class="wi-confirm-row">
+        <button type="button" class="wi-btn wi-sim" id="wi-sim">Sim, é isso</button>
+        <button type="button" class="wi-btn wi-nao" id="wi-nao">Não — eu só quero ver a proposta</button>
+      </div>
+    </div>
+
+    <div class="wi-out" id="wi-out" aria-live="polite"></div>
+
+    <p class="wi-note">
+      <strong>Anônimo, e isso é literal.</strong> Saem daqui exatamente quatro coisas: <b>qual botão
+      você tocou</b>, a <b>frase opcional</b> acima, <b>de qual página</b> o toque veio e a
+      <b>data</b>. Nenhum nome, e-mail ou telefone é enviado — nem como opção, porque este bloco não
+      pergunta. Se você escrever um e-mail ou telefone na frase por descuido, ele é apagado antes do
+      envio. Guardo no seu navegador só um número aleatório, para não contar você duas vezes.
+    </p>
+  </div>
+</section>
+
+<style>
+  .wi-sec{margin:26px 0}
+  .wi-card{
+    border:1px solid #e3e5ea;border-radius:14px;padding:20px 18px;background:#fbfbfc;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color:#15161a;line-height:1.5;text-align:left
+  }
+  .wi-kicker{
+    display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:#8b2252;background:#fbeef4;border-radius:999px;padding:5px 11px;margin:0 0 12px
+  }
+  .wi-h{font-size:21px;line-height:1.25;margin:0 0 8px;font-weight:750;color:#15161a}
+  .wi-lead{font-size:16px;color:#454b55;margin:0 0 16px}
+  .wi-lead b{color:#15161a}
+  .wi-field{margin:0 0 14px}
+  .wi-label{display:block;font-size:14.5px;font-weight:600;color:#454b55;margin:0 0 6px}
+  .wi-opt{font-weight:400;color:#7b828d}
+  .wi-ta{
+    width:100%;padding:10px 12px;border:1px solid #d7dae1;border-radius:9px;background:#fff;
+    font:inherit;font-size:15.5px;color:#15161a;resize:vertical
+  }
+  .wi-ta:focus{outline:2px solid #8b2252;outline-offset:1px;border-color:#8b2252}
+  .wi-opts{display:flex;flex-direction:column;gap:9px}
+  .wi-btn{
+    display:block;width:100%;text-align:left;font:inherit;cursor:pointer;
+    padding:13px 15px;border-radius:10px;border:1px solid #d7dae1;background:#fff;color:#15161a
+  }
+  .wi-btn b{display:block;font-size:16.5px;font-weight:700;line-height:1.3}
+  .wi-btn small{display:block;font-size:14px;color:#5c626c;margin-top:3px;line-height:1.4}
+  .wi-btn:hover{border-color:#b9bfc9}
+  .wi-btn:focus-visible{outline:2px solid #8b2252;outline-offset:2px}
+  .wi-btn[disabled]{opacity:.45;cursor:default}
+  .wi-a{border-color:#8b2252;background:#8b2252;color:#fff}
+  .wi-a small{color:#f2d8e4}
+  .wi-a:hover{border-color:#6e1a41;background:#6e1a41}
+  .wi-b{border-color:#8b2252;background:#fff;color:#8b2252}
+  .wi-b b{color:#6e1a41}
+  .wi-b small{color:#8a6377}
+  .wi-c small{color:#6f757e}
+  .wi-confirm{
+    margin-top:14px;border:1px solid #e8d5a8;background:#fdf5e6;border-radius:11px;padding:15px 16px
+  }
+  .wi-confirm p{margin:0 0 12px;font-size:15.5px;color:#5a4a29}
+  .wi-confirm-row{display:flex;flex-direction:column;gap:8px}
+  .wi-sim{border-color:#0b6b3a;background:#0b6b3a;color:#fff;font-weight:700;text-align:center}
+  .wi-sim:hover{background:#095630;border-color:#095630}
+  .wi-nao{text-align:center;font-weight:600}
+  .wi-out:not(:empty){margin-top:14px}
+  .wi-msg{border:1px solid #d7dae1;background:#fff;border-radius:11px;padding:14px 16px}
+  .wi-msg.ok{border-color:#b5dcc6;background:#f1faf5}
+  .wi-msg h3{margin:0 0 5px;font-size:16.5px;font-weight:700;color:#15161a}
+  .wi-msg p{margin:0;font-size:15px;color:#454b55}
+  .wi-note{font-size:13.5px;line-height:1.5;color:#6f757e;margin:15px 0 0}
+  .wi-note b,.wi-note strong{color:#454b55}
+  @media (min-width:620px){
+    .wi-card{padding:24px 22px}
+    .wi-confirm-row{flex-direction:row}
+    .wi-confirm-row .wi-btn{width:auto;flex:1}
+  }
+</style>
+
+<script>
+(function () {
+  var NTFY = 'https://ntfy.sh/gbp-est-intencao-9a253137';
+
+  var opts    = document.getElementById('wi-opts');
+  var confirm = document.getElementById('wi-confirm');
+  var out     = document.getElementById('wi-out');
+  var obs     = document.getElementById('wi-obs');
+  if (!opts || !out) return;
+
+  var enviados = {};   /* 1 mensagem por tipo, para sempre */
+  var enviando = false;
+
+  /* --- PII: e-mail e telefone somem antes de sair deste navegador --- */
+  function limpaPII(s) {
+    return String(s || '')
+      .replace(/[A-Za-z0-9._%+\-]+\s*(?:@|\(at\)|\[at\])\s*[A-Za-z0-9.\-]+\.[A-Za-z]{2,}/gi, ' ')
+      .replace(/[A-Za-z0-9._%+\-]*@[A-Za-z0-9._%+\-]*/g, ' ')
+      .replace(/\+?\d[\d\s().\-]{7,}\d/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 300);
+  }
+
+  /* --- ref: é o que torna o clique atribuível a UMA clínica --- */
+  function ref() {
+    try {
+      if (window.WIDGET_REF) return String(window.WIDGET_REF).slice(0, 80);
+      var q = new URLSearchParams(location.search).get('o');
+      if (q) return String(q).replace(/[^\w.\-]/g, '').slice(0, 80) || 'direto';
+      var m = location.pathname.match(/\/a\/([^\/]+)\/?/);
+      if (m) return decodeURIComponent(m[1]).slice(0, 80);
+    } catch (e) {}
+    return 'direto';
+  }
+
+  function pagina() {
+    try { return /\/a\//.test(location.pathname) ? 'auditoria' : 'landing'; }
+    catch (e) { return 'landing'; }
+  }
+
+  /* --- sid anônimo: número aleatório, sem nenhum dado pessoal.
+         Serve só para a mesma pessoa não ser contada duas vezes. --- */
+  function sid() {
+    var k = 'wi_sid_g00112', v = '';
+    try { v = window.localStorage.getItem(k) || ''; } catch (e) {}
+    if (!v) {
+      v = 'a' + Math.random().toString(36).slice(2, 10) + Math.random().toString(36).slice(2, 6);
+      try { window.localStorage.setItem(k, v); } catch (e) {}
+    }
+    return v;
+  }
+
+  function msg(classe, titulo, texto) {
+    out.innerHTML = '<div class="wi-msg ' + classe + '"><h3></h3><p></p></div>';
+    out.querySelector('h3').textContent = titulo;
+    out.querySelector('p').textContent = texto;
+  }
+
+  var RETORNO = 'Como eu não pedi o seu contato, não consigo te responder por aqui: '
+    + 'responda a mensagem por onde você chegou e eu retorno no mesmo canal.';
+
+  var FEEDBACK = {
+    pedido_proposta: ['ok', 'Anotado: você quer a proposta.',
+      'Vou montar o que eu faria na sua clínica e quanto fica. ' + RETORNO],
+    aceite_preco: ['ok', 'Anotado: R$297/mês, sem fidelidade.',
+      'Esse é o sinal mais forte que existe aqui e ele foi registrado como tal. ' + RETORNO],
+    interesse: ['', 'Anotado — e sem cobrança nenhuma.',
+      'Registrei como "ainda olhando", que é exatamente o que você disse. '
+      + 'Não conto isso como pedido de proposta. Se mudar de ideia, os outros dois botões continuam aí.']
+  };
+
+  function enviar(tipo, frase, botao) {
+    if (enviados[tipo] || enviando) return;
+    enviando = true;
+    if (botao) { botao.disabled = true; botao.dataset.rot = botao.querySelector('b').textContent; botao.querySelector('b').textContent = 'Enviando...'; }
+
+    var payload = {
+      tipo: tipo,
+      conta_para_o_gate: (tipo === 'pedido_proposta' || tipo === 'aceite_preco'),
+      declaracao: frase,
+      obs: limpaPII(obs ? obs.value : ''),
+      ref: ref(),
+      pagina: pagina(),
+      sid: sid(),
+      ts: new Date().toISOString()
+    };
+
+    fetch(NTFY, { method: 'POST', body: JSON.stringify(payload) })
+      .then(function (r) {
+        if (!r.ok) throw new Error('http ' + r.status);
+        enviados[tipo] = true;
+        enviando = false;
+        if (botao) { botao.querySelector('b').textContent = botao.dataset.rot; }
+        var f = FEEDBACK[tipo];
+        msg(f[0], f[1], f[2]);
+      })
+      .catch(function () {
+        enviando = false;
+        if (botao) { botao.disabled = false; botao.querySelector('b').textContent = botao.dataset.rot; }
+        msg('', 'Não consegui enviar agora',
+          'A mensagem não saiu — pode ser a sua rede, um bloqueador ou o serviço fora do ar. '
+          + 'Nada ficou pela metade. Tente de novo ou responda a mensagem por onde você chegou.');
+      });
+  }
+
+  /* --- aceite de preço exige 2 gestos: "na dúvida, não conta" --- */
+  var pendente = null;
+
+  opts.addEventListener('click', function (ev) {
+    var b = ev.target.closest ? ev.target.closest('.wi-btn') : null;
+    if (!b || !opts.contains(b)) return;
+    var tipo = b.getAttribute('data-tipo');
+    var frase = b.getAttribute('data-frase');
+    if (tipo === 'aceite_preco') {
+      pendente = b;
+      out.innerHTML = '';
+      confirm.hidden = false;
+      confirm.scrollIntoView({ block: 'nearest' });
+      return;
+    }
+    enviar(tipo, frase, b);
+  });
+
+  document.getElementById('wi-sim').addEventListener('click', function () {
+    confirm.hidden = true;
+    enviar('aceite_preco', pendente.getAttribute('data-frase'), pendente);
+  });
+
+  /* recuo NUNCA vira aceite: rebaixa para pedido de proposta */
+  document.getElementById('wi-nao').addEventListener('click', function () {
+    confirm.hidden = true;
+    var b = opts.querySelector('[data-tipo="pedido_proposta"]');
+    enviar('pedido_proposta', b.getAttribute('data-frase'), b);
+  });
+})();
+</script>
+<!-- FIM WIDGET DE INTENCAO -->
 
   <footer>
     <p><strong>Perfil no Mapa</strong> — gestão do Google Business Profile para clínicas de estética.</p>
