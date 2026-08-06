@@ -596,9 +596,10 @@
     <p class="wi-note">
       <strong>Anônimo, e isso é literal.</strong> Saem daqui exatamente quatro coisas: <b>qual botão
       você tocou</b>, a <b>frase opcional</b> acima, <b>de qual página</b> o toque veio e a
-      <b>data</b>. Nenhum nome, e-mail ou telefone é enviado — nem como opção, porque este bloco não
-      pergunta. Se você escrever um e-mail ou telefone na frase por descuido, ele é apagado antes do
-      envio. Guardo no seu navegador só um número aleatório, para não contar você duas vezes.
+      <b>data</b>. <b>Não peço nome, e-mail nem telefone</b> — este bloco simplesmente não tem esses
+      campos. E se você escrever um e-mail ou um telefone dentro da frase, por descuido, eles são
+      apagados no seu próprio navegador antes de qualquer coisa sair daqui. Guardo no seu navegador
+      só um número aleatório, para não contar você duas vezes.
     </p>
   </div>
 </section>
@@ -683,6 +684,7 @@
       .replace(/[A-Za-z0-9._%+\-]+\s*(?:@|\(at\)|\[at\])\s*[A-Za-z0-9.\-]+\.[A-Za-z]{2,}/gi, ' ')
       .replace(/[A-Za-z0-9._%+\-]*@[A-Za-z0-9._%+\-]*/g, ' ')
       .replace(/\+?\d[\d\s().\-]{7,}\d/g, ' ')
+      .replace(/[()\[\]{}<>]/g, ' ')   /* sobras de pontuação do que foi apagado */
       .replace(/\s+/g, ' ')
       .trim()
       .slice(0, 300);
