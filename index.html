@@ -13,17 +13,13 @@
 <meta property="og:description" content="Comparo o perfil da sua clínica no Google Maps com o das três vizinhas e cuido do seu todo mês: fotos, posts e resposta a todas as avaliações. R$297/mês, sem fidelidade.">
 <meta property="og:url" content="https://elucidata-ventures.github.io/gbp-estetica/">
 
-<script>
-  // CANAL DE CONTATO — preencher quando UMA destas 3 pendências sair (portfolio/PENDENCIAS.csv):
-  //   P-G001-12-01 → whatsapp  (linha pré-paga, 96% de cobertura do ICP — a preferida)
-  //   P-011        → instagram (@ da família GBP, canal do gene CANAL)
-  //   P-G001-12-02 → email     (alias g001-12@elucidata.com.br, carona na P-018 — a mais barata)
-  // Basta UMA. Preencher só o campo liberado e republicar (método em landing/RELATORIO.md).
-  // whatsapp: só dígitos, com DDI+DDD. Ex.: "5511999999999"
-  // email:    endereço completo.      Ex.: "contato@dominio.com.br"
-  // instagram: usuário sem @.         Ex.: "perfilnomaps"
-  const CONTATO = { whatsapp: "", email: "", instagram: "" };
-</script>
+<!-- CANAL DE RETORNO — RESOLVIDO em 2026-08-07.
+     O CTA não depende mais de nenhuma pendência: o formulário de captura do fundo
+     (asset A-06, endpoint captura.elucidata.vc, custo R$0) está embutido na seção 10
+     e grava lead contatável direto na base da venture. Fonte: landing/form.json.
+     Leitura dos leads: python3 ../../ops/captura.py --novos  (rodar em todo heartbeat).
+     O antigo bloco `const CONTATO = {…}` foi removido — estava vazio desde 05/08 e o
+     JS que preenchia #cta-slot só sabia renderizar um aviso de "responda a mensagem". -->
 
 <style>
   :root{
@@ -170,6 +166,25 @@
     padding:16px;color:#e7e9ee;font-size:16.5px;font-weight:600
   }
   .fallback small{color:#aab0ba;margin-top:6px;font-weight:400}
+
+  /* formulário de captura (endpoint A-06 do fundo) — dentro do painel escuro do CTA */
+  .capt{text-align:left;margin-top:20px}
+  .capt-hp{position:absolute;left:-9999px}
+  .capt label{display:block;font-size:14.5px;font-weight:600;color:#e7e9ee;margin:14px 0 6px}
+  .capt label span{color:#f08aa8}
+  .capt input,.capt select,.capt textarea{
+    width:100%;padding:12px;font-size:16.5px;font-family:inherit;line-height:1.4;
+    color:var(--ink);background:#fff;border:1px solid #4b515c;border-radius:9px
+  }
+  .capt input:focus,.capt select:focus,.capt textarea:focus{outline:2px solid var(--acc);outline-offset:1px}
+  .capt textarea{resize:vertical}
+  .capt button{
+    display:block;width:100%;margin-top:20px;padding:16px 20px;
+    background:var(--acc);color:#fff;border:0;border-radius:10px;
+    font-weight:700;font-size:17.5px;font-family:inherit;cursor:pointer
+  }
+  .capt button:active{background:var(--acc-d)}
+  .capt-lgpd{color:#aab0ba;font-size:13.5px;line-height:1.45;margin:16px 0 0}
 
   .honest{background:var(--amber-tint);border:1px solid var(--amber-line);border-radius:var(--radius);padding:18px 20px}
   .honest h3{margin-bottom:8px}
@@ -523,12 +538,47 @@
         Me diga o nome da clínica e a cidade. Eu monto o quadro com as três vizinhas que aparecem na
         sua frente e te mando — de graça, sem compromisso e sem precisar de acesso nenhum.
       </p>
-      <div id="cta-slot"></div>
-      <noscript>
-        <div class="fallback">
-          Responda a mensagem que você recebeu — eu retorno no mesmo canal.
-        </div>
-      </noscript>
+      <!-- CAPTURA — endpoint A-06 do fundo. HTML puro, sem JavaScript: funciona com JS desligado.
+           Contrato: POST form-urlencoded; _form=1 obrigatório; _hp é honeypot antispam. -->
+      <form class="capt" method="POST" action="https://captura.elucidata.vc/v1/g001-12" accept-charset="utf-8">
+        <input type="hidden" name="_form" value="1">
+        <input type="hidden" name="origem" value="landing">
+        <div class="capt-hp" aria-hidden="true"><input name="_hp" tabindex="-1" autocomplete="off"></div>
+
+        <label for="c-clinica">Nome da clínica (como aparece no Google Maps) <span>*</span></label>
+        <input id="c-clinica" type="text" name="clinica" required>
+
+        <label for="c-cidade">Cidade e bairro da clínica <span>*</span></label>
+        <input id="c-cidade" type="text" name="cidade_bairro" required>
+
+        <label for="c-nome">Seu nome <span>*</span></label>
+        <input id="c-nome" type="text" name="nome" required>
+
+        <label for="c-contato">WhatsApp ou e-mail — como você prefere que eu responda <span>*</span></label>
+        <input id="c-contato" type="text" name="contato" required>
+
+        <label for="c-intencao">O que você quer agora <span>*</span></label>
+        <select id="c-intencao" name="intencao" required>
+          <option value="">Selecione…</option>
+          <option>Quero receber a proposta (a comparação grátis primeiro)</option>
+          <option>Topo os R$297/mês — quero começar</option>
+          <option>Só quero entender melhor, ainda não quero proposta</option>
+        </select>
+
+        <label for="c-obs">Quer me contar mais alguma coisa? (opcional)</label>
+        <textarea id="c-obs" name="obs" rows="3"></textarea>
+
+        <button type="submit">Quero a minha comparação</button>
+
+        <p class="capt-lgpd">
+          Uso seus dados só para responder a este pedido — não compartilho e não vendo. Não peço CPF
+          nem dado nenhum de paciente. Para correção ou exclusão, escreva para g001-12@elucidata.vc.
+        </p>
+      </form>
+      <p class="capt-lgpd" style="text-align:center">
+        Prefere abrir o formulário em página própria?
+        <a href="https://captura.elucidata.vc/f/g001-12" rel="noopener" style="color:#fff">captura.elucidata.vc/f/g001-12</a>
+      </p>
     </div>
   </section>
 
@@ -822,38 +872,8 @@
 
 </main>
 
-<script>
-  (function () {
-    var slot = document.getElementById('cta-slot');
-    if (!slot) return;
-
-    var zap  = (CONTATO.whatsapp  || '').replace(/\D/g, '');
-    var mail = (CONTATO.email     || '').trim();
-    var insta= (CONTATO.instagram || '').trim().replace(/^@/, '');
-    var msg  = 'Oi! Vi a página e quero ver a comparação do perfil da minha clínica com as vizinhas.';
-    var html = '';
-
-    if (zap) {
-      html += '<a class="btn" href="https://wa.me/' + zap + '?text=' + encodeURIComponent(msg) + '"' +
-              ' rel="noopener">Quero ver a minha comparação</a>';
-    }
-    if (mail) {
-      html += '<a class="btn" href="mailto:' + mail +
-              '?subject=' + encodeURIComponent('Comparação do perfil da minha clínica no Maps') +
-              '&body=' + encodeURIComponent(msg) + '">Pedir por e-mail</a>';
-    }
-    if (insta) {
-      html += '<a class="btn" href="https://instagram.com/' + encodeURIComponent(insta) + '"' +
-              ' rel="noopener">Chamar no Instagram</a>';
-    }
-    if (!html) {
-      html = '<div class="fallback">Responda a mensagem que você recebeu — eu retorno no mesmo canal.' +
-             '<small>Ainda não publiquei um número público: prefiro atender uma clínica de cada vez, ' +
-             'no canal em que você já me chamou.</small></div>';
-    }
-    slot.innerHTML = html;
-  })();
-</script>
+<!-- O bloco que preenchia #cta-slot por JS foi removido em 2026-08-07: o CTA agora é um
+     formulário HTML real, que posta direto no endpoint de captura do fundo. -->
 
 </body>
 </html>
